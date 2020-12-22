@@ -1,0 +1,16 @@
+Package: dieroller
+Type: Package
+Title: Simulates Rolling a Die
+Version: 0.1.0
+Author: Janice Ji
+Maintainer: Janice Ji <jwj7@berkeley.edu>
+Description: Functions to create a die object, to roll a die multiple times,
+    and to summarize and visualize frequencies of the rolls.
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Suggests: testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Janice Ji" />
+
+<meta name="date" content="2018-04-27" />
+
+<title>Getting Started with dieroller</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting Started with dieroller</h1>
+<h4 class="author"><em>Janice Ji</em></h4>
+<h4 class="date"><em>2018-04-27</em></h4>
+
+
+
+<div id="die-rolling" class="section level2">
+<h2>Die Rolling</h2>
+<p>The package <code>&quot;dieroller&quot;</code> is a minimal implementation for simulating rolling a die a given number of times, and to visualize the relative frequencies in such a series of rolls</p>
+</div>
+<div id="creating-a-die" class="section level2">
+<h2>Creating a <code>die</code></h2>
+<p>The first step is to create a <code>&quot;die&quot;</code> object with the function <code>die()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mydie &lt;-<span class="st"> </span><span class="kw">die</span>()
+mydie
+<span class="co">#&gt; object &quot;die&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   side      prob</span>
+<span class="co">#&gt; 1    1 0.1666667</span>
+<span class="co">#&gt; 2    2 0.1666667</span>
+<span class="co">#&gt; 3    3 0.1666667</span>
+<span class="co">#&gt; 4    4 0.1666667</span>
+<span class="co">#&gt; 5    5 0.1666667</span>
+<span class="co">#&gt; 6    6 0.1666667</span></code></pre></div>
+<p>By default, <code>die()</code> creates a <em>fair</em> die with standard sides <code>1</code>, <code>2</code>, <code>3</code>, <code>4</code>, <code>5</code>, and <code>6</code>, and with probability values for each side of 1/6.</p>
+<p>You can change the defaults with arguments <code>sides</code> and <code>prob</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">loaded_die &lt;-<span class="st"> </span><span class="kw">die</span>(<span class="dt">sides =</span> <span class="kw">c</span>(<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>, <span class="st">'d'</span>, <span class="st">'e'</span>, <span class="st">'f'</span>), <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="dv">0</span>))
+loaded_die
+<span class="co">#&gt; object &quot;die&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   side prob</span>
+<span class="co">#&gt; 1    a  0.3</span>
+<span class="co">#&gt; 2    b  0.4</span>
+<span class="co">#&gt; 3    c  0.1</span>
+<span class="co">#&gt; 4    d  0.1</span>
+<span class="co">#&gt; 5    e  0.1</span>
+<span class="co">#&gt; 6    f  0.0</span></code></pre></div>
+</div>
+<div id="rolling-a-die" class="section level2">
+<h2>Rolling a die</h2>
+<p>Once you have defined a <code>&quot;die&quot;</code> object, you can use the function <code>roll()</code> to <em>roll</em> a die a given number of <code>times</code>. The output will be an object of class <code>&quot;roll&quot;</code>, which will contain the vector of <code>rolls</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">roll100 &lt;-<span class="st"> </span><span class="kw">roll</span>(mydie, <span class="dt">times =</span> <span class="dv">100</span>)
+roll100
+<span class="co">#&gt; object &quot;roll&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $rolls</span>
+<span class="co">#&gt;   [1] 4 1 6 1 1 4 2 4 3 6 1 1 1 3 3 4 6 3 3 5 2 5 5 4 5 1 4 6 4 1 2 6 5 4 2</span>
+<span class="co">#&gt;  [36] 3 1 4 6 1 3 1 4 6 3 3 5 3 4 5 5 1 5 5 3 1 2 6 4 2 3 3 1 2 6 1 2 1 5 5</span>
+<span class="co">#&gt;  [71] 5 2 6 1 3 3 6 5 3 3 1 3 6 4 3 1 4 5 4 1 4 4 4 2 5 3 3 3 2 6</span></code></pre></div>
+<p>The <code>summary()</code> function gives you a nice table of frequencies:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(roll100)
+<span class="co">#&gt; summary &quot;roll&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   side count prop</span>
+<span class="co">#&gt; 1    1    20 0.20</span>
+<span class="co">#&gt; 2    2    11 0.11</span>
+<span class="co">#&gt; 3    3    22 0.22</span>
+<span class="co">#&gt; 4    4    18 0.18</span>
+<span class="co">#&gt; 5    5    16 0.16</span>
+<span class="co">#&gt; 6    6    13 0.13</span></code></pre></div>
+</div>
+<div id="plot-of-relative-frequencies" class="section level2">
+<h2>Plot of relative frequencies</h2>
+<p>You can use the function <code>plot()</code> to create a bar graph with the relative frequencies of of die rolls:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(roll100)</code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAAtFBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZpAAZrY6AAA6ADo6AGY6OgA6Ojo6OmY6ZpA6ZrY6kLY6kNtmAABmADpmOgBmOjpmkLZmkNtmtttmtv+QOgCQZgCQZjqQkGaQkLaQtpCQttuQtv+Q29uQ2/+2ZgC2Zjq2kDq2kGa227a229u22/+2/7a2//++vr7bkDrbkGbbtmbbtpDb27bb29vb/9vb////tmb/25D/27b//7b//9v///8RreKOAAAACXBIWXMAAA7DAAAOwwHHb6hkAAALDElEQVR4nO2dC3ucuBWG5dTuTJsm6bjpbuzNdtMuaRs3JdttjS/8//9VHd0QA9KnMTCAON/zJGYGXdA74iBxjkDUrKjE3AewdDEgIAYExICAGBAQAwJiQEAMCIgBATEgIAYExICAGBAQAwJiQEAMCIgBATEgIAYExICAGBAQAwJiQEAMCIgBATEgIAYExICAGBAQAwJiQEAMCGhEQM+34up+wP4x6mgn/rwX4p37WJisz5+FuPjueNNTIV59dRXlDKgSUgebU7JQWWURpF1709dUgBanUlz8bLf/814YQPLbT/U3IW5am74IkPsgLn56L17d6c72zvS7vbj4oFLppE/X6ndoksiC/yY/XOrqf3ktxG8+uF/XK+mb3HPx9s5Upfe387pjf9N89nK1qqQD/QLqoOL+LA+HTpuCeodBVMqtvc56Sz1G/e9t2kOUTb/85PUgqkiRlQxIl19dvxPHgLwkpUmhai/09sEA6CazP4cF5OUlVUefvVydsq7+B+pwX8hUbUCXhq35tQvdaLvpjtAW5zXm6q7+L5G4qx/2lEEe8O6eyB0B8pLIg7i8o/918j/eP167MptkMtvuvv7FmQEHyOU13/723pRL8nO1q6QDRXXQt7qSQ+sU+/bu3vQJUxO1zNt0v5VtuqtIn4CGZdlAkQnagPwkpcoly9/Z4su3XzQAL5ncf/nFO7UdIJfX6td/vHam0svVrRLWYVtb6DyNDXIWIAbINdcAoop0GTKp7ejWfB/bIC+JqZl+Pf+yojbbJQljDlqAXF7z9UfhX0u8XN0qE+swnedUQNYaORukKlJlGDtAn+yhe4BUQV6SI0A7/wj8ZI/v9dZfY4CoiZd/+bUB1uTqVgnrsOVW1OFOBeQ3vanI9qCbdjkdQF4S0IO8i+bjj6+FsAn6Aemj9HpUk6tbZWIdsR4UMdJ+011Fugz/+LwT0VRRCWMOewCZ5NWbT84+tMddzz94PbgHUGVt0qGTq1slrAPbIP3HXubtZqfpriJTRiFHPrW8FskM2pQXwpjGQ/14ay4pLonfSJlcXSHEjTX8Npm6vtE5gHrQ1T1V0QBzuTpV1qiO0FWs3bk+NAPFD/5A0Wu6q8iUYUYW/sCGADlzeGglaTWysDa2NQ6iBJ9FU2gQkBt72J/Ry9WpEtbhj4MCgGJTjabpTUWmjMePkoUdvtrhpPxBpA18+099rjZJ2o1UI+nv3RF4JdEe8aYzku5exS4/lc1Yz8t1XCWsozYj6e/rOgRIzxS+O97Uaf6+l5MCbyT9+DE4F2tNSDYsBgTEgIAYEFDO94NGEQMCYkBADAiIAQExICAGBMSAgBgQEAMCYkBADAiIAQExICAGBNQAero+KA/40BCezNQAKshRtquL43CijcsBerq+qSsh//GNxJZagAryFTKglrxTbPd0Td5WPsVa8o20CidhPm3xZR6IAQF5gJ4oXKI4hNM2kQYbMuQNoOri55KMdIRQaYN4KhHlmJMcoOdbOZCm6Itw76AkRuVmBtytcRA1OzJQpCRG2xlOdnpQEe4bE/egf/dq9GpO1LENKo8XLvhyOyexQUsHpAPb/Jisrkzs2zRT/sUDmlsMCCgHQBRCqszQFHP+JQOSw0NrXmKj5FJaKD3d3xqgNOnL/PNtfDj5Yq0fkB0oyqHSJgEVah1CZIDjBorFbouA9BA6ekexbNYNtQEJJ/Wxv6morQsHZM+f6CzLDqWfbwOpMgZkz59hJ0/GgEzveNgPmmXlDKhuVmhihfpZ1oDGK44BgeLyBDTKDfmcARUJZCDEjAFF3RlG2KuRNaDIvVathHvSEwGakZ03UIRe+QSvRsaAVHBQXNvuQUk3zKBXI2NASYJeja0DSiwuU0AJ0R2JxeUJKCG6I7W4LAElRHckF5cloITojuTisgSUEN2RXNw5AU3N7qTojtTi8gSUEt2RWFymgMYrjgGB4rIElDIXC5cyseNwCYCMBkZn5g9o4HqxDQBa20Dx7IDWNtU4N6CB68UyBjROhG/GgMYsjgGB4rIE5AaKg7zPGQMybp+cZvOjsPPuB2ky0XU8c/nmlwDo6U/6RkdsoDibb34JgGwPGrZeLGNAdEex1qsNQlqkb/58gMx7WqIWaNM9KEFL9M0vCtASffNnBLRO1/P5AK3U9Xw2QGdyPZ+8azGAzuR6Xi+gBNdzwnw2Y0AprufgKqhNAEpxPcNQ2KwBpSgQCpvuOFwvIG8eMUAZA0qItE8uLktA4zwSKGNApwUvvHjF4XoBjaNcAUkDZG+5DlO+gA4MKNYi94pqYIOGezXWCqjxasQ0gldjvYASNMY96awBjeHVyBoQ9yCkEbwaeQMawauxZkBn8WqsGNB5vBrrBcReDQCIvRoA0JkW1K0X0JkW1K0Y0HkW1K0Z0BhiQEnFZQlonJf6ZAyoLgZYoC04DkkVNXHa1T7rBlSnxCckFJctIO5BoRbV5n78wFFQ1oD4KhZr0WhiQEnF5Qco8bUR2wU0mjIGlLJejAHV4MEC2/XNF81satA7DrMFlBS8wJ5VoI375u11ftBbMnMGRK802tUP+0HvOMwYELlUK3Icxtw+W/bNk4F5+P1X9e/lyhgQGRi6kjGgACA1QiwOUz+aYsWA6PFunReHtbXpgWKCNn6Zx9r4QBFrwz0o8fFTwYHikeMwJ40cxJmf8vvJR9bIUa756YVRrlO8iHaZGjnKNT+NHOWan0aOcs1Pp0W5jvKiyHXppChXPFnNTyNPNfLTKc/uSJis5qdTnt2x7R6U0imwVyM/nfbsDp6sso7FgIAYEBADAmJAQAwIiAEBMSAgBgTEgICmBhSIplF33gLzuTJ6Vypwx1NPgvrX4zzsByzymhjQ03Xv1O75ViIo+4+avAZVkFAVmAc+/C7IlOLmXr6WaVpAVWDuqyMhex0oyu8UfOqw8t311hScY+ubNC921kwKqBKH2E2UcD8JAiqvfugHVAZ7SKRvpWhqGxQDVAT3hd4PIxsbsEHFH0JGrXr1r+vo+oG4ZgQUvOtWhdpDZ0s/oKdr+rrXb17SWQ6fFB7UfICqyJXl+bYXA/Lb9Vame+OLb6LPBih+17bXPClrEgPUGwWvzXM0QD6muQCVcavQ31RzUzjY1F57rI/gxaZ6JkBhB65GEz4j+ntQJJd216zsFHvYh/sPEYg46UJXMTJo/cFNZbxAoHkAmZOl/2JexM6ioA2K5KriywTj4skqEAMCYkBADAiIAQExICAGBMSAgBgQEAMCYkBADAiIAQExICAGBMSAgBgQEAMCYkBADAiIAQExICAGBMSAgBgQEAMCYkBACwDUrJYNBy1alb6XXSZPWGk7UAsA1AgCaj96BfMcQWsD5HeY7AFRBLy4Ma2m+PofqcWlCVYxe7V0BAt9ZcJpTHKXd7Jl2DMCUlFhlbhRjaSQ4IoChijmkuKr7F6VtFIcd00PssnVFzbLJJoRkI2tUk+RVSF0BbX4oHf5kVc6PsyzyV7ym9plmeQoZwRk13FQI3XzJAJtVyQAf5WH5qG+ND3KJld5bZZJjnJOG6SW/GgbVDpALpLV7CXpxst0FlDZAoSCXwdp7quYOU2OepC3l/6k9KCpNDcg0y3M8p/jkZ/5FLBBpbVBUw4W5zTS9MtX3pXIXcWo59i9OunxVcwmd3ltZxtdc/agSkcC94yD6Ayq/DhhE8nbdJbOOGiqBxrNfYotXgwIiAEBMSAgBgTEgIAYEBADAmJAQAwIiAEBMSAgBgTEgIAYEBADAmJAQAwIiAEBMSAgBgTEgIAYEBADAvo/9zDSpv/sU7kAAAAASUVORK5CYII=" /><!-- --></p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

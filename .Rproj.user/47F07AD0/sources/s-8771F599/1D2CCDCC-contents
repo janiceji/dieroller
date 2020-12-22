@@ -1,0 +1,27 @@
+---
+title: "NCT and Exo bias correlation"
+author: "Janice Ji"
+date: "December 23, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#Null: There is no relationship between a fan's NCT bias and Exo bias
+#Alternative: There is a relationship between a fan's NCT bias and Exo bias
+
+nctexo <- read.table("nctexo.txt")
+nctexo_matrix <- data.matrix(nctexo)
+nctexo_matrix
+chisq.test(nctexo_matrix)
+```
+
+```{r}
+nausea <- c(50, 50, 50, 50, 50, 50, 50, 50, 50, 50)
+nausea_matrix <- matrix(data = nausea, nrow = 5, ncol = 2, byrow = TRUE)
+nausea_matrix
+chisq.test(nausea_matrix) 
+```

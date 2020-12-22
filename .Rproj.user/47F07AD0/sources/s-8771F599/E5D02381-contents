@@ -1,0 +1,286 @@
+---
+title: "HW 10"
+author: "Janice Ji"
+date: "November 20, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+#10A
+```{r}
+#a
+chicks_df <- read.table("chicks.txt", header = TRUE)
+egg_length <- chicks_df[,1]
+chick_weight <- chicks_df[,4]
+chicks_xy <- data.frame(egg_length, chick_weight)
+
+chicks_plot <- chicks_xy %>% ggplot(aes(x = egg_length, y = chick_weight)) + geom_point()
+chicks_plot
+
+#The plot is linear and homoscedastic (variance of the errors are constant), so the assumptions are reasonable.
+
+mean(chicks_xy[,1]); sd(chicks_xy[,1]) #mean and sd of egg length
+mean(chicks_xy[,2]); sd(chicks_xy[,2]) #mean and sd of chick weight
+cor(chicks_xy[,1], chicks_xy[,2]) #correlation between egg length and chick weight
+
+chicks_plot_reg <- chicks_xy %>% ggplot(aes(x = egg_length, y = chick_weight)) + geom_point() + geom_abline(intercept = -1.77, slope = 0.25217, color = 'blue')
+chicks_plot_reg
+```
+
+```{r}
+#b
+reg <- lm(formula = chick_weight~egg_length)
+reg
+
+#F test (ANOVA)
+anova(reg)
+
+#t-test
+t.test(egg_length, chick_weight)
+```
+
+```{r}
+#c
+egg_breadth <- chicks_df[,2]
+egg_weight <- chicks_df[,3]
+cor(egg_length, chick_weight) #egg length vs. chick weight
+cor(egg_breadth, chick_weight) #egg breadth vs. chick weight
+cor(egg_weight, chick_weight) #egg weight vs. chick weight
+
+#Egg weight is most highly correlated with chick weight
+
+chicks_xy2 <- data.frame(egg_weight, chick_weight)
+chicks_plot2 <- chicks_xy2 %>% ggplot(aes(x = egg_weight, y = chick_weight)) + geom_point() + geom_smooth(method = lm, se = FALSE)
+chicks_plot2 #scatterplot with regression line
+
+reg2 <- lm(chick_weight ~ egg_weight)
+reg2
+chick_res <-  resid(reg2)
+chick_res_df <- data.frame(chick_res)
+chick_res_plot <- chick_res_df %>% ggplot(aes(x = egg_weight, y = chick_res)) + geom_point()
+chick_res_plot #residual plot
+#The residual plot is a little heterscedastic in the middle.
+summary(reg2)
+```
+
+#10B
+```{r}
+#a
+reg3 <- lm(formula = chick_weight~egg_length+egg_breadth)
+summary(reg3)
+
+#Compared to the simple regression in part 10A, their R-squared values are both around 0.71 so the two regressions are similar.
+```
+
+```{r}
+#b
+reg4 <- lm(formula = egg_weight~egg_length+egg_breadth)
+summary(reg4)
+
+#R-squared is 0.95, which is close to 1. This supports the conclusion that two results in part a are similar since linear regression on egg weight is linear regression on the length and the breadth.
+```
+
+```{r}
+#c
+reg5 <- lm(formula = chick_weight~egg_length+egg_breadth+egg_weight)
+summary(reg5)
+
+anova(reg5)
+t.test(egg_breadth, chick_weight)
+t.test(egg_weight, chick_weight)
+
+#This regression is not as impressive as either of the two in a, even though it has a higher R-squared, because the predictors are highly correlated.
+```
+
+```{r}
+#d
+
+#summary(lm(formula = chick_weight~egg_length+egg_weight))
+#summary(lm(formula = chick_weight~egg_weight+egg_breadth))
+
+#The R-squared values are all around 0.71, so there is not one that is clearly better than another.
+```
+
+#10C
+```{r}
+#Null: Score before and after treatment are the ame
+#Alternative: Score before and after treatment are different
+
+#a
+tox <- read.table("tox.txt", header = TRUE)
+
+t.test(tox$month15, tox$base, paired = TRUE) #reject null
+wilcox.test(tox$base, tox$month15) #reject null
+
+#This concludes that the score after the treatment is lower than those before and that the treatment is toxic.
+```
+
+```{r}
+#b
+reg6 <- lm(tox$month15 ~ tox$chemo + tox$base) #The base score and amount of chemo should be used as predictors because they affect the score after 15 months the most.
+summary(reg6)
+
+tox_df <- data.frame(tox$chemo, tox$month15)
+tox_df2 <- data.frame(tox$base, tox$month15)
+tox_plot <- tox_df %>% ggplot(aes(x = tox.chemo, y = tox.month15)) + geom_point() + geom_smooth(method = lm, se = FALSE)
+tox_plot
+tox_plot2 <- tox_df2 %>% ggplot(aes(x = tox.base, y = tox.month15)) + geom_point() + geom_smooth(method = lm, se = FALSE)
+tox_plot2
+```
+
+#10D
+```{r}
+#a
+baby <- read.table("baby.txt", header = TRUE)
+
+#Assessing Normality
+ggplot() + 
+  geom_histogram(aes(x = baby$bw), bins = 20, color = 'black')
+qqnorm(baby$bw)
+
+#Both the histogram and the qq plot look normal.
+```
+
+```{r}
+#b
+#Assessing Normality
+ggplot() + 
+  geom_histogram(aes(x = baby$mpw), bins = 20, color = 'black')
+qqnorm(baby$mpw)
+
+#The histogram is skewed right. The qq plot is concave up. If the skewness was in the other direction, the qq plot would be concave down.
+```
+
+```{r}
+#c
+
+#Gestation days, mother's height, mother's pregnancy weight, and indication of smoking or not smoking could all be used as predictors for baby's birthweight.
+
+reg7 <- lm(baby$bw ~ baby$gd + baby$mh + baby$mpw + baby$sm)
+summary(reg7)
+
+#The R-squared value is 0.2519, which is higher than other combinations, so these are the best predictors.
+```
+
+```{r}
+#d
+
+#The coefficient is -8.34. The coefficient tells how the two variables are related. In this case, it means the baby's birthweight is typically lower if the mother is a smoker.
+```
+
+#10E
+```{r}
+#a
+women <- read.table("women.txt", header = TRUE)
+reg8 <- lm(women$avew~women$h)
+summary(reg8)
+
+women_res <-  resid(reg8)
+women_res_df <- data.frame(women_res)
+women_res_df
+women_res_plot <- women_res_df %>% ggplot(aes(x = women$h, y = women_res)) + geom_point()
+women_res_plot
+
+#The value of R is the square root of 0.991, which is 0.995. This means that the two are highly correlated. The residual plot is curved upwards so the relationship should not be linear.
+```
+
+```{r}
+#b
+
+#If we take individual weights instead of average weight for each height, the correlation will be less because the point will be more scattered.
+```
+
+```{r}
+#c
+poly2 <- lm(women$avew ~ poly(women$h,2))
+poly3 <- lm(women$avew ~ poly(women$h,3))
+summary(poly2)
+summary(poly3)
+
+poly2_res <- resid(poly2)
+poly2_res_df <- data.frame(poly2_res)
+poly2_res_plot <- poly2_res_df %>% ggplot(aes(x = women$h, y = poly2_res_df$poly2_res)) + geom_point()
+poly2_res_plot
+
+poly3_res <- resid(poly3)
+poly3_res_df <- data.frame(poly3_res)
+poly3_res_plot <- poly3_res_df %>% ggplot(aes(x = women$h, y = poly3_res_df$poly3_res)) + geom_point()
+poly3_res_plot
+
+#A polynomial of degree 3 is the best fit due to the nature of the residual plot.
+```
+
+#10F
+```{r}
+#a
+
+bodytemp <- read.csv("bodytemp.csv")
+bodytemp_df_male <- data.frame(rate.male = bodytemp$rate[1:65], temp.male = bodytemp$temperature[1:65])
+bodytemp_plot_male <- bodytemp_df_male %>% ggplot(aes(x = rate.male, y = temp.male)) + geom_point() #scatterplot of heart rate versus body temperature for males
+bodytemp_plot_male
+
+bodytemp_df_female <- data.frame(rate.female = bodytemp$rate[66:130], temp.female = bodytemp$temperature[66:130])
+bodytemp_plot_female <- bodytemp_df_female %>% ggplot(aes(x = rate.female, y = temp.female)) + geom_point() #scatterplot of heart rate versus body temperature for females
+bodytemp_plot_female
+
+#Neither scatterplots show any relationship between heart rate and body temperature.
+```
+
+```{r}
+#b
+bodytemp_plot <- bodytemp %>% ggplot(aes(x = bodytemp$rate, y = bodytemp$temperature)) + geom_point(aes(shape = factor(gender), color = factor(gender))) +
+  xlab("Heart rate") + ylab("Body temperature") #scatterplot of heart rate versus body temperature
+bodytemp_plot
+
+#The relationship for males is the about same as the relationship for females with slightly less variability.
+```
+
+```{r}
+#c
+
+reg10 <- lm(bodytemp_df_male$temp.male~bodytemp_df_male$rate.male)
+reg10
+summary(reg10)
+
+male_resid <- resid(reg10)
+male_res_df <- data.frame(male_resid)
+male_res_plot <- male_res_df %>% ggplot(aes(x = bodytemp_df_male$rate.male, y = male_res_df$male_resid)) + geom_point()
+male_res_plot #residual plot
+
+
+bodytemp <- read.csv("bodytemp.csv")
+bodytemp_df_male <- data.frame(rate.male = bodytemp$rate[1:65], temp.male = bodytemp$temperature[1:65])
+bodytemp_plot_male <- bodytemp_df_male %>% ggplot(aes(x = rate.male, y = temp.male)) + geom_point() + geom_smooth(method = lm, se = FALSE) #scatterplot of heart rate versus body temperature for males
+bodytemp_plot_male
+
+#There is no linear relationship between the two variables since R is only 0.038 and the plots don't show any sort of linear relationship. The estimated slope is 0.02326 and its standard error is 0.01469.
+```
+
+
+```{r}
+#d
+reg11 <- lm(bodytemp_df_female$temp.female~bodytemp_df_female$rate.female)
+reg11
+summary(reg11)
+
+female_resid <- resid(reg11)
+female_res_df <- data.frame(female_resid)
+female_res_plot <- female_res_df %>% ggplot(aes(x = bodytemp_df_female$rate.female, y = female_res_df$female_resid)) + geom_point()
+female_res_plot #residual plot
+
+
+bodytemp <- read.csv("bodytemp.csv")
+bodytemp_df_female <- data.frame(rate.female = bodytemp$rate[66:130], temp.female = bodytemp$temperature[66:130])
+bodytemp_plot_female <- bodytemp_df_female %>% ggplot(aes(x = rate.female, y = temp.female)) + geom_point() + geom_smooth(method = lm, se = FALSE) #scatterplot of heart rate versus body temperature for males
+bodytemp_plot_female
+
+#There is no linear relationship between the two variables since R is only 0.0823 and the plots don't show any sort of linear relationship. The estimated slope is 0.02632 and its standard error is 0.01107.
+```

@@ -1,0 +1,78 @@
+---
+title: "HW 9"
+author: "Janice Ji"
+date: "November 11, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+#9A
+```{r}
+#Check normality and variance assumptions
+dogs <- read.table('dogs.txt')
+dogs
+qqnorm(dogs[1,]); qqnorm(dogs[2,]); qqnorm(dogs[3,])
+dog_groups <- c(rep("isofluorane", 10), rep("halothane", 10), rep("cyclopropane", 10))
+dog_transpose <- t(dogs)
+dog_treatments <- as.numeric(c(dog_transpose[,1], dog_transpose[,2], dog_transpose[,3]))
+dogs_tidy <- data.frame(dog_groups, dog_treatments)
+dogs_tidy %>% ggplot(aes(x = dog_groups, y = dog_treatments)) + geom_boxplot()
+
+#Null: All three means are equal
+#Alternative: The means are not equal
+
+#F Test
+oneway.test(dog_treatments~dog_groups) #Not assuming equal variance
+
+#Nonparametric Test
+dog_groups1 <- c(rep(1, 10), rep(2, 10), rep(3, 10))
+kruskal.test(dog_treatments~dog_groups1)
+```
+#9B
+```{r}
+c57 <- read.table("C57.txt")
+aj <- read.table("aj.txt")
+f2 <- read.table("f2.txt")
+mice_groups <- c(rep("c57", 53), rep("aj", 53), rep("f2", 28))
+mice_treatments <- c(c57[,1], aj[,1], f2[,1])
+mice_tidy <- data.frame(mice_groups, mice_treatments)
+mice_boxplot <- mice_tidy %>% ggplot(aes(x = mice_groups, y = mice_treatments)) + geom_boxplot()
+oneway.test(mice_treatments~mice_groups) #reject null so use Bonferroni
+mice_boxplot
+mean(c57[,1]); mean(aj[,1]); mean(f2[,1])
+sd(c57[,1]); sd(aj[,1]); sd(f2[,1])
+#None of the confidence intervals overlap
+```
+#9C
+```{r}
+typeI <- c(1.7, 1.9, 6.1, 12.5, 16.5, 25.1, 30.5, 42.1, 82.5)
+typeII <- c(13.6, 19.8, 25.2, 46.2, 46.2, 61.1)
+typeIII <- c(13.4, 20.9, 25.1, 29.7, 46.9)
+#Check Normality and Variance assumptions
+qqnorm(typeI); qqnorm(typeII); qqnorm(typeIII)
+watch_groups <- c(rep("typeI", 9), rep("typeII", 6), rep("typeIII", 5))
+watch_treatments <- c(typeI, typeII, typeIII)
+watch_tidy <- data.frame(watch_groups, watch_treatments)
+watch_boxplot <- watch_tidy %>% ggplot(aes(x = watch_groups, y = watch_treatments)) + geom_boxplot()
+watch_boxplot
+
+#Null: All three means are equal
+#Alternative: The means are not equal
+
+#F Test
+oneway.test(watch_treatments~watch_groups) #Not assuming equal variance
+
+#Nonparametric Test
+watch_groups1 <- c(rep(1, 9), rep(2, 6), rep(3, 5))
+kruskal.test(watch_treatments~watch_groups1)
+```
+
+

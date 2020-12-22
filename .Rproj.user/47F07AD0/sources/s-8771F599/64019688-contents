@@ -1,0 +1,118 @@
+---
+title: "HW 8"
+author: "Janice Ji"
+date: "October 31, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(tidyr)
+```
+#8A
+```{r}
+#Null: The multinomial distributions for the majors are the same
+#Alternative: The multinomial distributions for the majors are different
+grades <- c(8, 15, 13, 14, 19, 15, 15, 4, 7, 3, 1, 4)
+grades_matrix <- matrix(data = grades, nrow = 4, ncol = 3, byrow = TRUE)
+chisq.test(grades_matrix)
+```
+
+#8B
+```{r}
+#Null: There is no relationship between drug and nausea (independent)
+#Alternative: There is a relationship between drug and nausea (dependent)
+nausea <- c(70, 95, 100, 52, 33, 52, 32, 35, 48, 37)
+nausea_matrix <- matrix(data = nausea, nrow = 5, ncol = 2, byrow = TRUE)
+nausea_matrix
+chisq.test(nausea_matrix)
+```
+#8D
+```{r}
+#Finding the covariance
+B <- 10000
+fun <- function(){
+  a <- rnorm(1)
+  b <- rnorm(2, mean = 1)
+  p <- prod(a < b)
+}
+  vec <- replicate(B, fun())
+mean(vec)
+```
+
+#8E
+```{r}
+#a
+set.seed(1)
+#Machine 1: method A
+#Machine 2: method B
+#Null: The means are the same
+#Alternative: The means are different
+heat <- read.delim('11.29.txt', sep = ' ')
+heat
+sample <- replicate(1000, sample(heat$heat.change, 8, replace = TRUE))
+sample_df <- data.frame(sample)
+means <-  colMeans(sample_df)
+obs_mean <- mean(heat$heat.change[14:21])
+obs_mean
+ggplot() + 
+  geom_histogram(aes(x = means), bins = 20, color = 'black') +
+  geom_vline(xintercept = obs_mean, color = "yellow")
+#Null Hypothesis rejected
+
+```
+
+#8F
+```{r}
+#Rice 11.40a
+present <- c(22.8, 10.2, 20.8, 27.0, 19.2, 9.0, 14.2, 19.8, 14.5, 14.8)
+absent <- c(23.5, 31.0, 19.5, 26.2, 26.5, 25.2, 24.5, 23.8, 27.8, 22.0)
+df <- data.frame(present, absent)
+df_tidyr <- df %>% gather(key = type, value = weightgain, 'present', 'absent')
+df_tidyr
+ggplot(df_tidyr, aes(x = df_tidyr$type, y = df_tidyr$weightgain)) +
+  geom_dotplot(binaxis = 'y', stackdir = 'center') +
+  xlab('Type') +
+  ylab('Weight Gain (g)')
+```
+
+#8G
+```{r}
+#b
+se <- sqrt((sd(present)^2 + sd(absent)^2) / 10)
+se
+
+#c
+t.test(absent, present, paired = TRUE)
+```
+
+#8H
+```{r}
+#d
+wilcox.test(present, absent)
+```
+
+#8I
+```{r}
+#a
+#Null: Body temperatures are the same
+#Alternative: Body temperatures are different
+bodytemp <- read.delim('bodytemp.txt', sep = ' ')
+t.test(bodytemp[1:65, 1], bodytemp[66:130,1])
+
+#b
+#Null: Heart rates are the same
+#Alternative: Body temperatures are different
+t.test(bodytemp[1:65, 3], bodytemp[66:130,3])
+
+#c
+#Nonparametric test
+#Null: There is a difference in the means
+#Alternative: There are no differences in the means
+wilcox.test(bodytemp[1:65, 1], bodytemp[66:130, 1]) #reject null
+wilcox.test(bodytemp[1:65, 3], bodytemp[66:130, 3]) #accept null
+```
